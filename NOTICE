@@ -1,0 +1,23 @@
+Mobile Agent
+Copyright 2026 fclcs <fclcs@users.noreply.github.com>
+
+本仓库基于以下开源项目二次开发，其原始版权与许可证声明在此保留：
+
+1. Open-AutoGLM
+   https://github.com/zai-org/Open-AutoGLM
+   Copyright Zhipu AI
+   Licensed under the Apache License, Version 2.0
+
+2. Open-AutoGLM-Web
+   https://github.com/joe-qai/Open-AutoGLM-Web
+   Licensed under the Apache License, Version 2.0
+
+本仓库的主要改动：
+- 多设备流程编排与批次并行执行（步超时、部分失败跳过、截图留证）
+- 脚本救援服务：确定性 handler / 视觉词表 / Agent 兜底三级链路，业务判据验收
+- 救援经验沉淀为技能手册，命中后免模型调用
+- 统一的应用更新弹窗与广告拦截（vision_ads 视觉基元层）
+- 脚本版本化存储与原子部署
+- 前端控制台改版（石墨 + 琥珀主题）
+
+本项目非上述项目的官方发行版，不代表其立场，也不含任何上游项目的商业授权。
