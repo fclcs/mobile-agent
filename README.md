@@ -83,15 +83,26 @@
 ## 快速开始
 
 ```bash
-# 后端
 pip install -r requirements.txt
-python main.py
 
-# 前端
-cd frontend && npm install && npm run dev
+# 1. 生成 demo 数据（3 台虚拟设备 / 5 个脚本 / 流程 / 运行记录 / 报告 / 救援记录）
+python scripts/seed_demo.py
+
+# 2. 后端：控制台 API（演示模式，不找真机）
+(cd backend && PHONE_AGENT_DEMO_MODE=1 python run.py)     # http://127.0.0.1:8005
+
+# 3. 救援服务（独立进程）
+OAG_RESCUE_DB=rescue-demo.db OAG_RESCUE_SCREENSHOTS=rescue-demo-screenshots \
+  python -m rescue                                        # http://127.0.0.1:8010
+
+# 4. 前端
+cd frontend && npm install && npm run dev                 # http://localhost:5173
 ```
 
-自带 demo 数据与 demo 脚本，不接真机也能跑通界面。
+不接真机也能看到完整界面。接真机只需去掉 `PHONE_AGENT_DEMO_MODE`，用 `adb connect` 把设备接入设备池。
+
+测试：前端 `npx jest` 可离线全绿；后端 pytest 中涉及真机执行与真实模型请求的用例需要设备与网络，
+离线环境会失败或阻塞，服务层其余用例可离线通过。
 
 ---
 
