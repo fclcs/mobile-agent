@@ -78,7 +78,9 @@ def connect() -> sqlite3.Connection:
     global _conn
     with _LOCK:
         if _conn is None:
-            os.makedirs(os.path.dirname(config.DB_PATH), exist_ok=True)
+            directory = os.path.dirname(config.DB_PATH)
+            if directory:  # 相对文件名（如 rescue-demo.db）时 dirname 为空，Windows 上 makedirs('') 会报错
+                os.makedirs(directory, exist_ok=True)
             _conn = sqlite3.connect(config.DB_PATH, timeout=15, check_same_thread=False)
             _conn.row_factory = sqlite3.Row
             _conn.execute("PRAGMA journal_mode=WAL")

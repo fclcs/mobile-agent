@@ -6,10 +6,10 @@
 
 from __future__ import annotations
 
-from . import ads, interrupt, navigation, reader, unknown, update
+from . import ads, interrupt, navigation, reader, search, unknown, update
 
 HANDLERS = sorted(
-    (update, interrupt, ads, navigation, reader, unknown),
+    (update, interrupt, ads, search, navigation, reader, unknown),
     key=lambda module: module.PRIORITY,
     reverse=True,
 )

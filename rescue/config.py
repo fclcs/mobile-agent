@@ -13,15 +13,17 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, asdict
 
-DB_PATH = os.environ.get("OAG_RESCUE_DB", "/var/lib/oag-rescue/rescue.db")
-SCREENSHOT_DIR = os.environ.get("OAG_RESCUE_SCREENSHOTS", "/var/lib/oag-rescue/screenshots")
-SKILLS_DIR = os.environ.get("OAG_RESCUE_SKILLS", "/opt/oag-rescue/skills")
+_HERE = os.path.dirname(os.path.abspath(__file__))
+
+DB_PATH = os.environ.get("OAG_RESCUE_DB", "rescue.db")
+SCREENSHOT_DIR = os.environ.get("OAG_RESCUE_SCREENSHOTS", "rescue-screenshots")
+SKILLS_DIR = os.environ.get("OAG_RESCUE_SKILLS", os.path.join(_HERE, "skills"))
 DRAFT_DIR = os.path.join(SKILLS_DIR, "_draft")
 SCREENSHOT_RETENTION_DAYS = int(os.environ.get("OAG_RESCUE_RETENTION_DAYS", "14"))
 
-# 与平台脚本完全一致的 adb 位置；vision_ads 里是裸 "adb"，靠 PATH 找到它。
-ADB_DIR = os.environ.get("OAG_ADB_DIR", "/opt/phone-access/platform-tools")
-PLATFORM_ROOT = os.environ.get("OAG_PLATFORM_ROOT", "/opt/mobile-agent")
+# 与平台脚本用同一个 adb；vision_ads 里是裸 "adb"，靠 PATH 找到它。留空则不注入。
+ADB_DIR = os.environ.get("OAG_ADB_DIR", "")
+PLATFORM_ROOT = os.environ.get("OAG_PLATFORM_ROOT", "")
 
 MAX_SECONDS = 150          # 单次救援硬上限（客户端等 180s，留 30s 回传余量）
 MAX_VISION_CALLS = 3       # 每次救援最多几次视觉判定，防止模型反复试
@@ -85,9 +87,10 @@ class RescueSettings:
             for key in vision_keys:
                 os.environ.pop(key, None)
             os.environ["PHONE_AGENT_VISION_MODEL"] = self.vision_model or ""
-        path = os.environ.get("PATH", "")
-        if ADB_DIR not in path.split(os.pathsep):
-            os.environ["PATH"] = ADB_DIR + os.pathsep + path
+        if ADB_DIR:
+            path = os.environ.get("PATH", "")
+            if ADB_DIR not in path.split(os.pathsep):
+                os.environ["PATH"] = ADB_DIR + os.pathsep + path
 
 
 DEFAULTS = RescueSettings()

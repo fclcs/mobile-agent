@@ -362,7 +362,7 @@ export function RescuePage() {
             </div>
           ))}
           {skills.active.length === 0 && skills.drafts.length === 0 && (
-            <p className="text-xs text-[#9AA0A6]">技能目录为空，检查 /opt/oag-rescue/skills</p>
+            <p className="text-xs text-[#9AA0A6]">技能目录为空，请检查救援服务的技能目录（环境变量 OAG_RESCUE_SKILLS）</p>
           )}
         </div>
       </div>

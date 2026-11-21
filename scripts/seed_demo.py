@@ -25,7 +25,7 @@ RESCUE_DB = Path(os.environ.get("OAG_RESCUE_DB", str(ROOT / "rescue-demo.db")))
 SHOT_ROOT = ROOT / "workflow_screenshots"
 RESCUE_SHOT_ROOT = ROOT / "rescue-demo-screenshots"
 
-NOW = datetime(2026, 11, 20, 10, 0, 0)
+NOW = datetime.now().replace(second=0, microsecond=0)  # 演示数据始终落在“今天”，看板上才有当日统计
 
 
 def ts(dt: datetime) -> str:
@@ -338,7 +338,7 @@ def seed_rescue() -> None:
     ]
     RESCUE_SHOT_ROOT.mkdir(parents=True, exist_ok=True)
     for idx, (rid, dev, app, kind, handler, goal, steps_n, vision, tools) in enumerate(runs):
-        created = NOW - timedelta(hours=6 - idx, minutes=20)
+        created = NOW - timedelta(minutes=(6 - idx) * 2)  # 落在最近十几分钟，当日统计随时都有数
         conn.execute(
             "INSERT INTO rescue_runs (rescue_id,run_id,step_id,device_id,script_name,app,package,"
             "goal,state_json,expected,status,handler,resolved,vision_calls,tool_calls,evidence,"
@@ -379,5 +379,5 @@ if __name__ == "__main__":
     print("done. 启动：")
     print("  cd backend && PHONE_AGENT_DEMO_MODE=1 python run.py")
     print(f"  OAG_RESCUE_DB={RESCUE_DB} OAG_RESCUE_SKILLS={ROOT / 'rescue' / 'skills'} "
-          f"OAG_RESCUE_SCREENSHOT_DIR={RESCUE_SHOT_ROOT} python -m rescue")
+          f"OAG_RESCUE_SCREENSHOTS={RESCUE_SHOT_ROOT} python -m rescue")
     sys.exit(0)
